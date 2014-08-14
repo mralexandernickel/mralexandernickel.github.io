@@ -4,6 +4,10 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON "package.json"
     src_path: "src"
     assets_path: "public/assets"
+    haml:
+      dist:
+        files:
+          "public/index.html": ["<%= src_path %>/haml/index.haml"]
     coffee:
       compile:
         files:
@@ -24,9 +28,10 @@ module.exports = (grunt) ->
           {expand: true, flatten: true, src: ["<%= src_path %>/img/*"], dest: "<%= assets_path %>/img", filter: 'isFile'}
         ]
   
+  grunt.loadNpmTasks "grunt-contrib-haml"
   grunt.loadNpmTasks "grunt-contrib-coffee"
   grunt.loadNpmTasks "grunt-contrib-less"
   grunt.loadNpmTasks "grunt-contrib-concat"
   grunt.loadNpmTasks "grunt-contrib-copy"
 
-  grunt.registerTask "default", ["coffee","less","concat","copy"]
+  grunt.registerTask "default", ["haml","coffee","less","concat","copy"]
