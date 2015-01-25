@@ -27,11 +27,26 @@ module.exports = (grunt) ->
         files: [
           {expand: true, flatten: true, src: ["<%= src_path %>/img/*"], dest: "<%= assets_path %>/img", filter: 'isFile'}
         ]
+    uglify:
+      target:
+        files:
+          "<%= assets_path %>/js/<%= pkg.name %>.min.js": ["<%= assets_path %>/js/<%= pkg.name %>.js"]
+    cssmin:
+      target:
+        files: [
+          expand: true
+          cwd: "<%= assets_path %>/css"
+          src: ["*.css", "!*.min.css"]
+          dest: "<%= assets_path %>/css"
+          ext: ".min.css"
+        ]
   
   grunt.loadNpmTasks "grunt-contrib-haml"
   grunt.loadNpmTasks "grunt-contrib-coffee"
   grunt.loadNpmTasks "grunt-contrib-less"
   grunt.loadNpmTasks "grunt-contrib-concat"
   grunt.loadNpmTasks "grunt-contrib-copy"
+  grunt.loadNpmTasks "grunt-contrib-uglify"
+  grunt.loadNpmTasks "grunt-contrib-cssmin"
 
   grunt.registerTask "default", ["haml","coffee","less","concat","copy"]
