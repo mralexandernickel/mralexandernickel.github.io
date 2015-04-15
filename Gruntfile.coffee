@@ -27,6 +27,10 @@ module.exports = (grunt) ->
         files: [
           {expand: true, flatten: true, src: ["<%= src_path %>/img/*"], dest: "<%= assets_path %>/img", filter: 'isFile'}
         ]
+    autoprefixer:
+      single_file:
+        src: "<%= assets_path %>/css/<%= pkg.name %>.css"
+        dest: "<%= assets_path %>/css/<%= pkg.name %>.prefixed.css"
     uglify:
       target:
         files:
@@ -48,5 +52,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-copy"
   grunt.loadNpmTasks "grunt-contrib-uglify"
   grunt.loadNpmTasks "grunt-contrib-cssmin"
+  grunt.loadNpmTasks "grunt-autoprefixer"
 
   grunt.registerTask "default", ["haml","coffee","less","concat","copy"]
