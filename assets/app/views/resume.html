@@ -1,0 +1,48 @@
+<div class="row profile_picture">
+  <div class="col-sm-12">
+    <img class="img-circle img-gravatar" height="400" ng-src="{{resume.person.gravatar}}" width="400">
+  </div>
+</div>
+<div class="row profile_name">
+  <div class="col-sm-6 col-sm-offset-3">
+    <div class="name-container wow bounce">
+      <div class="name outer">
+        <div class="fullname">{{resume.person.firstname}} {{resume.person.lastname}}</div>
+      </div>
+      <div class="name inner">
+        <div class="fullname">{{resume.person.firstname}} {{resume.person.lastname}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+<section class="skills">
+  <div class="row">
+    <div class="col-sm-12 headline">
+      <h2>Technical Skills</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6" ng-repeat="skill in skills">
+      <h3>{{skill.title}}</h3>
+      <div class="progress">
+        <div class="progress-bar progress-bar-inverse wow fadeInLeft"
+             data-wow-delay="{{600*($index%2)}}ms"
+             style="width:{{skill.percent}}%;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="row projects">
+  <div class="col-sm-12 headline">
+    <h2>Chosen Projects</h2>
+  </div>
+  <div class="col-sm-6 project-container" ng-repeat="project in projects">
+    <a class="img-tile-container" href="/#/project/{{$index+1}}">
+      <img class="img-tile img-responsive wow fadeIn"
+           data-wow-duration="500ms"
+           data-wow-delay="{{300*($index%2)}}ms"
+           ng-src="{{project.thumbnail}}">
+      <h3 class="tile-headline">{{project.title}}</h3>
+    </a>
+  </div>
+</div>

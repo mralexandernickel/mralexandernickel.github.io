@@ -1,0 +1,16 @@
+{
+  "skills": [
+    {"title": "HTML5", "percent": 80},
+    {"title": "JavaScript", "percent": 80},
+    {"title": "jQuery", "percent": 80},
+    {"title": "Angular", "percent": 70},
+    {"title": "CSS3", "percent": 80},
+    {"title": "Bootstrap", "percent": 90},
+    {"title": "Ruby on Rails", "percent": 65},
+    {"title": "Less", "percent": 85},
+    {"title": "PHP", "percent": 70},
+    {"title": "Grunt", "percent": 80},
+    {"title": "GIT", "percent": 70},
+    {"title": "Wordpress", "percent": 80}
+  ]
+}

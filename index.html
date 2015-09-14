@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html ng-app="resume">
+  <head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <title>Alexander Nickel</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
+    <link href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.0/angular-material.min.css" rel="stylesheet">
+    <link href="assets/lib/animate.css/animate.min.css" rel="stylesheet">
+    <link href="assets/css/resume.css" rel="stylesheet">
+  </head>
+  <body ng-controller="ApplicationController">
+    <div id="main">
+      <div autoscroll="autoscroll" class="container" ng-view></div>
+    </div>
+    <footer>
+      <div class="container" layout="row" layout-sm="column">
+        <div flex="100" flex-gt-sm="50" md-theme="darkTheme" ng-controller="ContactformController">
+          <h2 class="headline wow bounceInLeft"
+              data-wow-delay="400ms"
+              data-wow-duration="700ms">Get in Touch</h2>
+          <form name="contactForm" ng-submit="submitHandler(contactForm)">
+            <md-input-container>
+              <label>Name</label>
+              <input name="name" ng-model="data.name" required type="text">
+            </md-input-container>
+            <md-input-container>
+              <label>Email</label>
+              <input name="email" ng-model="data.email" required type="email">
+              <div ng-messages="contactForm.email.$error">
+                <div ng-message="email">Please double-check the given Email</div>
+              </div>
+            </md-input-container>
+            <md-input-container>
+              <label>Company</label>
+              <input name="company" ng-model="data.company" type="text">
+            </md-input-container>
+            <md-input-container>
+              <label>Your Message</label>
+              <textarea name="message" ng-model="data.message" required></textarea>
+            </md-input-container>
+            <div layout-align="end center" layout="row">
+              <md-button class="md-raised md-primary">Send Message</md-button>
+            </div>
+          </form>
+        </div>
+        <div flex="100" flex-gt-sm="50" layout-align="end end" layout="row" hide-sm>
+          <img class="js" src="/assets/img/logo_js.svg" width="70px">
+        </div>
+      </div>
+    </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-route.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-messages.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-animate.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-aria.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.0/angular-material.min.js" type="text/javascript"></script>
+    <script src="/assets/lib/wow.js/dist/wow.min.js" type="text/javascript"></script>
+    <script src="/assets/lib/mandrill-api-js/mandrill.min.js" type="text/javascript"></script>
+    <script>
+      window.app = angular.module("resume", ["ngRoute","ngMaterial","ngMessages"])
+    </script>
+    <script src="/assets/app/app.js" type="text/javascript"></script>
+  </body>
+</html>

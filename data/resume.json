@@ -1,0 +1,12 @@
+{
+  "person": {
+    "firstname": "Alexander",
+    "lastname": "Nickel",
+    "gravatar": "http://www.gravatar.com/avatar/eb046bef9a123998b85042549e711c23?s=400"
+  },
+  "profiles": [
+    {"platform": "github", "url": "http://github.com/mralexandernickel"},
+    {"platform": "xing", "url": "#"},
+    {"platform": "facebook", "url": "#"}
+  ]
+}
