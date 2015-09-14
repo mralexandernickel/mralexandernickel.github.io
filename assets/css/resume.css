@@ -7216,6 +7216,7 @@ section.skills .doughnuts {
 .project-container .img-tile-container:hover img {
   filter: none;
   -webkit-filter: none;
+  transform: scale(1.1);
 }
 .project-container .img-tile-container:hover .tile-headline {
   background: #000000;
@@ -7229,7 +7230,7 @@ section.skills .doughnuts {
   /* IE6-9 */
   -webkit-filter: grayscale(1);
   /* Google Chrome & Safari 6+ */
-  transition: -webkit-filter 350ms, filter 350ms;
+  transition: all 350ms;
 }
 .project-container .img-tile-container .tile-headline {
   position: absolute;
