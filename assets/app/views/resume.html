@@ -5,7 +5,7 @@
 </div>
 <div class="row profile_name">
   <div class="col-sm-6 col-sm-offset-3">
-    <div class="name-container wow bounce">
+    <div class="name-container wow slideInDown" data-wow-duration="350ms">
       <div class="name outer">
         <div class="fullname">{{resume.person.firstname}} {{resume.person.lastname}}</div>
       </div>
@@ -38,9 +38,9 @@
   </div>
   <div class="col-sm-6 project-container" ng-repeat="project in projects">
     <a class="img-tile-container" href="/#/project/{{$index+1}}">
-      <img class="img-tile img-responsive wow pulse"
-           data-wow-duration="250ms"
-           data-wow-delay="{{200*($index%2)}}ms"
+      <img class="img-tile img-responsive wow fadeIn"
+           data-wow-duration="500ms"
+           data-wow-delay="{{300*($index%2)}}ms"
            ng-src="{{project.thumbnail}}">
       <h3 class="tile-headline">{{project.title}}</h3>
     </a>
