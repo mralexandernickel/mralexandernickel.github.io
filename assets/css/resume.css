@@ -7230,7 +7230,7 @@ section.skills .doughnuts {
   /* IE6-9 */
   -webkit-filter: grayscale(1);
   /* Google Chrome & Safari 6+ */
-  transition: all 350ms;
+  transition: all 200ms;
 }
 .project-container .img-tile-container .tile-headline {
   position: absolute;
