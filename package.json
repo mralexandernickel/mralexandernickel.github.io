@@ -1,0 +1,12 @@
+{
+  "name": "scratch",
+  "version": "0.1.0",
+  "author": {
+    "name": "Alexander Nickel",
+    "email": "mr.alexander.nickel@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://mralexandernickel@bitbucket.org/mralexandernickel/scratch.git"
+  }
+}
