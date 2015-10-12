@@ -1,2 +1,6 @@
 .DS_Store
 node_modules
+*.swa
+*.swp
+tmp
+log/*.log
