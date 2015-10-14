@@ -3,10 +3,14 @@
     "title": "Location Search",
     "subtitle": "A Fullcreen Location Search using Angular's $filter, Google-Maps-API and the Fisher-Yates Algorithm",
     "description": "Während der Umsetzung eines Projektes für meinen Arbeitgeber, sollte eine Suche implementiert werden. Insgesamt sollten ca 4000 Datensätze durchsucht werden. Sollten die Filterkriterien mehr als 5 Datensätze zurückgeben, sollten nach einem Zufallsprinzip 5 Datensätze zurück gegeben werden, bei weniger als 5 Treffern sollten diese Treffer in zufälliger Reihenfolge ausgegeben werden. Da die Datensätzte unter anderem auch Adressen beinhalteten, hat es sich angeboten diese 5 oder weniger Treffer zusätzlich als Marker auf einer Google-Map zu zeigen. Der gesamt Projektumfang betrug 3 separate Wordpress-Installationen, sowie eine Ruby on Rails Anwendung. Um hierbei ausreichend Performance garantieren zu können, habe ich mich beim vServer für 4GB RAM entschieden, was mir nun bei dem Suchmodul die Möglichkeit bot die Ergebnisse live nach jedem Tastenanschlag zu zeigen. So wird be dem Prokjekt nun bei jedem Keydown ein AJAX-Request gefeuert, auf dem Server die eine MySQL Tabelle durchsucht, danach per PHP 5 zufällige Datensätze aus dem Ergebnis geholt und dann als Response zurück an den Browser geliefert.\r\n\r\n",
-    "thumbnail": "http://lorempixel.com/600/400"
+    "thumbnail": "http://lorempixel.com/600/400",
+    "github": "location-search"
   },
-  {"title": "Lorem Ipsum", "thumbnail": "http://lorempixel.com/600/400"},
-  {"title": "Dolor sit amet", "thumbnail": "http://lorempixel.com/600/400"},
-  {"title": "Blubb", "thumbnail": "http://lorempixel.com/600/400"},
-  {"title": "TWO", "thumbnail": "http://lorempixel.com/600/400"}
+  {
+    "title": "Angular Fingerprints",
+    "subtitle": "A FingerprintProvider for AngularJS",
+    "description": "Sometimes its needed to generate a File-Fingerprint on the Clientside, maybe to check if the Files that were uploaded to the Server are really the same...every bit of it. Also I used this in another Application where I stored Metadata of Files ",
+    "thumbnail": "http://lorempixel.com/600/400",
+    "github": "nickel.fingerprint"
+  }
 ]

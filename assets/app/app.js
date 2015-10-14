@@ -63,13 +63,25 @@
 (function() {
   var ProjectsController;
 
-  ProjectsController = function($scope, $routeParams, Projects) {
-    var projectIndex;
+  ProjectsController = function($scope, $routeParams, Projects, $http, $sce) {
+    var getMarkdown, md2html, projectIndex;
+    md2html = function(md) {
+      var converter;
+      converter = new showdown.Converter();
+      return converter.makeHtml(md);
+    };
+    getMarkdown = function(repo) {
+      return $http.get("https://raw.githubusercontent.com/mralexandernickel/" + repo + "/master/PROJECT.md").success(function(d) {
+        return $scope.description = $sce.trustAsHtml(md2html(d));
+      });
+    };
     projectIndex = $routeParams.projectId - 1;
     return Projects.async().then(function(d) {
       $scope.projects = d.data;
       $scope.project = d.data[projectIndex];
-      return console.log($scope.project);
+      if ($scope.project.github != null) {
+        return getMarkdown($scope.project.github);
+      }
     });
   };
 
