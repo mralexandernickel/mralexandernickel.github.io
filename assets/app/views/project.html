@@ -4,11 +4,9 @@
 </div>
 <div class="col-sm-8">
   <div ng-bind-html="description"></div>
-  <div>
-    <md-button class="md-primary md-raised button-left" ng-click="goBack()"><i class="fa fa-arrow-left"></i> Go Back</md-button>
-  </div>
 </div>
-<div class="col-sm-4">
+<div class="col-sm-4" layout="column">
   <md-button class="md-raised md-primary" ng-click="showRepo()">See on Github</md-button>
   <md-button class="md-raised md-primary" ng-click="showDemo()" ng-if="demo">Demo</md-button>
+  <md-button class="md-primary" ng-click="goBack()"><i class="fa fa-arrow-left"></i> Go Back</md-button>
 </div>
