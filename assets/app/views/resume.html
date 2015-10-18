@@ -37,11 +37,11 @@
     <h2>Chosen Projects</h2>
   </div>
   <div class="col-sm-6 project-container" ng-repeat="project in projects">
-    <a class="img-tile-container" href="/#/project/{{$index+1}}">
+    <a class="img-tile-container" href="/#/projects/{{project.github}}">
       <img class="img-tile img-responsive wow fadeIn"
            data-wow-duration="500ms"
            data-wow-delay="{{300*($index%2)}}ms"
-           ng-src="{{project.thumbnail}}">
+           ng-src="https://raw.githubusercontent.com/mralexandernickel/{{project.github}}/master/thumbnail.png">
       <h3 class="tile-headline">{{project.title}}</h3>
     </a>
   </div>

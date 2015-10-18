@@ -64,7 +64,19 @@
   var ProjectsController;
 
   ProjectsController = function($scope, $routeParams, Projects, $http, $sce) {
-    var getMarkdown, md2html, projectIndex;
+    var __construct, getBranches, getData, getMarkdown, getRepo, md2html;
+    __construct = function() {
+      return getData();
+    };
+    $scope.showRepo = function() {
+      return window.open("http://github.com/mralexandernickel/" + $scope.project.github, "_blank");
+    };
+    $scope.showDemo = function() {
+      return window.open("http://mralexandernickel.github.io/" + $scope.project.github, "_blank");
+    };
+    $scope.goBack = function() {
+      return window.history.back();
+    };
     md2html = function(md) {
       var converter;
       converter = new showdown.Converter();
@@ -75,14 +87,35 @@
         return $scope.description = $sce.trustAsHtml(md2html(d));
       });
     };
-    projectIndex = $routeParams.projectId - 1;
-    return Projects.async().then(function(d) {
-      $scope.projects = d.data;
-      $scope.project = d.data[projectIndex];
-      if ($scope.project.github != null) {
-        return getMarkdown($scope.project.github);
-      }
-    });
+    getBranches = function() {
+      return $http.get("https://api.github.com/repos/mralexandernickel/" + $scope.project.github + "/branches").success(function(d) {
+        var ghPages;
+        ghPages = d.filter(function(branch) {
+          return branch.name === "gh-pages";
+        });
+        if (ghPages.length > 0) {
+          return $scope.demo = true;
+        }
+      });
+    };
+    getRepo = function() {
+      return $http.get("https://api.github.com/repos/mralexandernickel/" + $scope.project.github).success(function(d) {
+        return $scope.project.subtitle = d.description;
+      });
+    };
+    getData = function() {
+      return Projects.async().then(function(d) {
+        $scope.project = d.data.filter(function(project) {
+          return project.github === $routeParams.repoName;
+        })[0];
+        if ($scope.project.github != null) {
+          getMarkdown($scope.project.github);
+        }
+        getRepo();
+        return getBranches();
+      });
+    };
+    return __construct();
   };
 
   app.controller("ProjectsController", ProjectsController);
@@ -113,7 +146,7 @@
     return $routeProvider.when("/", {
       controller: "ResumeController",
       templateUrl: "/assets/app/views/resume.html"
-    }).when("/project/:projectId", {
+    }).when("/projects/:repoName", {
       controller: "ProjectsController",
       templateUrl: "/assets/app/views/project.html"
     }).otherwise({
