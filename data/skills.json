@@ -1,7 +1,7 @@
 {
   "skills": [
     {"title": "JavaScript", "percent": 80},
-    {"title": "Angular", "percent": 85},
+    {"title": "AngularJS", "percent": 85},
     {"title": "jQuery", "percent": 90},
     {"title": "HTML5", "percent": 90},
     {"title": "CSS3", "percent": 90},
