@@ -6,6 +6,13 @@
       return new WOW().init();
     }, 500);
     $scope.autoscroll = false;
+    $scope.mailLink = function() {
+      var account, domain, protocol;
+      protocol = "mailto:";
+      account = "mralexandernickel";
+      domain = "gmail.com";
+      return "" + protocol + account + "@" + domain;
+    };
     return $scope.$on("$routeChangeStart", function(e, next, current) {
       if (next.$$route.controller === "ProjectsController") {
         return $scope.autoscroll = true;
