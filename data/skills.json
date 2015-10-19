@@ -10,7 +10,7 @@
     {"title": "Less", "percent": 100},
     {"title": "Sass", "percent": 90},
     {"title": "PHP", "percent": 85},
-    {"title": "Wordpress", "percent": 95}
+    {"title": "Wordpress", "percent": 95},
     {"title": "Grunt", "percent": 95},
     {"title": "GIT", "percent": 70},
     {"title": "Linux", "percent": 90}
