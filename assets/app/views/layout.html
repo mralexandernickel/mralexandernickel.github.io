@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html ng-app="resume">
-  <head>
+  <head ng-controller="HeadController">
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="yes" name="apple-mobile-web-app-capable">
-    <title>Alexander Nickel</title>
+    <title ng-bind="title.get()">Alexander Nickel</title>
     <link rel="shortcut icon" href="/assets/img/favicon.png" type="image/png">
     <link href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">

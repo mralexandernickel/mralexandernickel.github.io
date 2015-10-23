@@ -68,9 +68,20 @@
 }).call(this);
 
 (function() {
+  var HeadController;
+
+  HeadController = function($scope, Title) {
+    return $scope.title = Title;
+  };
+
+  app.controller("HeadController", HeadController);
+
+}).call(this);
+
+(function() {
   var ProjectsController;
 
-  ProjectsController = function($scope, $routeParams, Projects, $http, $sce) {
+  ProjectsController = function($scope, $routeParams, Projects, $http, $sce, Title) {
     var __construct, getBranches, getData, getMarkdown, getRepo, md2html;
     __construct = function() {
       return getData();
@@ -115,6 +126,7 @@
         $scope.project = d.data.filter(function(project) {
           return project.github === $routeParams.repoName;
         })[0];
+        Title.setResource($scope.project.title);
         if ($scope.project.github != null) {
           getMarkdown($scope.project.github);
         }
@@ -227,5 +239,29 @@
   };
 
   app.service("Skills", Skills);
+
+}).call(this);
+
+(function() {
+  var TitleService;
+
+  TitleService = function() {
+    var base, resource, service;
+    base = "Alexander Nickel";
+    resource = "Portfolio";
+    return service = {
+      get: function() {
+        return base + " | " + resource;
+      },
+      setBase: function(newBase) {
+        return base = newBase;
+      },
+      setResource: function(newResource) {
+        return resource = newResource;
+      }
+    };
+  };
+
+  app.service("Title", TitleService);
 
 }).call(this);
