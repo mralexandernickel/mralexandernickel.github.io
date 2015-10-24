@@ -2,6 +2,7 @@
 node_modules
 *.swa
 *.swp
+*.swo
 tmp
 log/*.log
 public
