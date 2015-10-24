@@ -87,11 +87,11 @@
       return getData();
     };
     $scope.showRepo = function() {
-      ga.send("Project", "Show Repository", $scope.project.title);
+      ga("send", "event", "Project", "Show Repository", $scope.project.title);
       return window.open("http://github.com/mralexandernickel/" + $scope.project.github, "_blank");
     };
     $scope.showDemo = function() {
-      ga.send("Project", "Show Demo", $scope.project.title);
+      ga("send", "event", "Project", "Show Demo", $scope.project.title);
       return window.open("http://mralexandernickel.github.io/" + $scope.project.github, "_blank");
     };
     $scope.goBack = function() {
