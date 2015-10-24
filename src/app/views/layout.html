@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html ng-app="resume">
+  <head ng-controller="HeadController">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <title ng-bind="title.get()">Alexander Nickel</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
+    <link href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.0/angular-material.min.css" rel="stylesheet">
+    <link href="assets/lib/animate.css/animate.min.css" rel="stylesheet">
+    <link href="assets/css/mralexandernickel.css" rel="stylesheet">
+  </head>
+  <body ng-controller="ApplicationController">
+    <div id="main">
+      <div autoscroll="autoscroll" class="container" ng-view></div>
+    </div>
+    <footer md-theme="darkTheme">
+      <div class="container" layout="row" layout-sm="column">
+        <div flex="100" flex-gt-sm="50" ng-controller="ContactformController">
+          <h2 class="headline wow bounceInLeft"
+              data-wow-delay="400ms"
+              data-wow-duration="700ms">Get in Touch</h2>
+          <form name="contactForm" ng-submit="submitHandler(contactForm)">
+            <md-input-container>
+              <label>Name</label>
+              <input name="name" ng-model="data.name" required type="text">
+            </md-input-container>
+            <md-input-container>
+              <label>Email</label>
+              <input name="email" ng-model="data.email" required type="email">
+              <div ng-messages="contactForm.email.$error">
+                <div ng-message="email">Please double-check the given Email</div>
+              </div>
+            </md-input-container>
+            <md-input-container>
+              <label>Company</label>
+              <input name="company" ng-model="data.company" type="text">
+            </md-input-container>
+            <md-input-container>
+              <label>Your Message</label>
+              <textarea name="message" ng-model="data.message" required></textarea>
+            </md-input-container>
+            <div layout-align="end center" layout="row">
+              <md-button class="md-raised md-primary">Send Message</md-button>
+            </div>
+          </form>
+        </div>
+        <div flex="100" flex-gt-sm="50" layout-align="space-between" layout="column">
+          <div layout="row" layout-align="end end" layout-align-sm="center center">
+            <md-button class="md-primary md-fab" ng-href="{{mailLink}}">
+              <md-icon md-font-icon="fa-envelope-o" class="fa"></md-icon>
+            </md-button>
+            <md-button class="md-primary md-fab" ng-href="http://github.com/mralexandernickel" target="_blank">
+              <md-icon md-font-icon="fa-github" class="fa"></md-icon>
+            </md-button>
+            <md-button class="md-primary md-fab" ng-href="https://www.xing.com/profile/Alexander_Nickel16" target="_blank">
+              <md-icon md-font-icon="fa-xing" class="fa"></md-icon>
+            </md-button>
+          </div>
+          <div layout="row" layout-align="end end" hide-sm>
+            <img class="js" src="/assets/img/logo_js.svg" width="70px">
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.0/angular-material.min.js"></script>
+    <script src="/assets/lib/showdown/dist/showdown.min.js"></script>
+    <script src="/assets/lib/wow.js/dist/wow.min.js"></script>
+    <script src="/assets/lib/mandrill-api-js/mandrill.min.js"></script>
+    <script>
+      window.app = angular.module("resume", ["ngRoute","ngMaterial","ngMessages"])
+    </script>
+    <script src="/assets/app/app.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-68990262-1', 'auto', {
+        "siteSpeedSampleRate": 100
+      });
+      ga("set", "anonymizeIp", true);
+      ga('send', 'pageview');
+
+    </script>
+  </body>
+</html>

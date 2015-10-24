@@ -1,0 +1,27 @@
+footer {
+  position: relative;
+  z-index: 1;
+  background: @grayDark;
+  padding: 20px 0;
+
+  h2 {
+    color: @darkPrimary;
+    text-shadow: 0 1px 15px rgba(0,0,0,0.6);
+  }
+
+  .badges {
+    img {
+      .grayscale;
+      transition: -webkit-filter 500ms,
+                  filter 500ms;
+
+      &:hover {
+        filter: none;
+        -webkit-filter: none;
+      }
+    }
+    .html5 {}
+    .js {}
+    .css3 {}
+  }
+}

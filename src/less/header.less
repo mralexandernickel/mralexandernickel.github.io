@@ -1,0 +1,60 @@
+.profile_picture {
+  padding-top: 40px;
+  text-align: center;
+}
+
+.profile_name {
+  padding-top: 40px;
+
+  .name-container {
+    position: relative;
+    margin: 50px auto 20px;
+    height: 180px;
+    width: 180px;
+  }
+
+  .name {
+    .fullname {
+      font-family: "Satisfy";
+      font-weight: 700;
+      font-size: 64px;
+      padding-top: 50px;
+      margin-left: -120px;
+      width: 420px;
+      text-indent: 10px;
+    }
+  }
+
+  .name.outer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    
+    .fullname {
+      color: @black;
+      margin-left: -113px;
+    }
+  }
+
+  .name.inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    border-radius: 50%;
+    height: 180px;
+    width: 180px;
+    overflow: hidden;
+    color: @darkPrimary;
+    text-align: center;
+    font-size: 32px;
+    background: @grayDark;
+    box-shadow: inset 0 1px 15px rgba(0,0,0,0.6);
+    
+    .fullname {
+      color: @darkPrimary;
+      text-shadow: 0 1px 15px rgba(0,0,0,0.6);
+    }
+  }
+}
