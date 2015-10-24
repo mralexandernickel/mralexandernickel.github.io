@@ -4,9 +4,11 @@ ProjectsController = ($scope, $routeParams, Projects, $http, $sce, Title) ->
     getData()
 
   $scope.showRepo = ->
+    ga.send "Project", "Show Repository", $scope.project.title
     window.open "http://github.com/mralexandernickel/#{$scope.project.github}", "_blank"
 
   $scope.showDemo = ->
+    ga.send "Project", "Show Demo", $scope.project.title
     window.open "http://mralexandernickel.github.io/#{$scope.project.github}", "_blank"
 
   $scope.goBack = -> window.history.back()
