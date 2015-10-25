@@ -7994,6 +7994,7 @@ button.close {
 }
 .img-gravatar {
   background-color: #ccc;
+  max-width: 100%;
 }
 html {
   height: 100%;
