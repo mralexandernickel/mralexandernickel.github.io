@@ -6,5 +6,9 @@
   {
     "title": "Angular Fingerprints",
     "github": "nickel.fingerprint"
+  },
+  {
+    "title": "Angular Password Strength",
+    "github": "nickel.minStrength"
   }
 ]
