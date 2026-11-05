@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://www.mralexandernickel.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.mralexandernickel.com/" rel="alternate" type="text/html" /><updated>2026-11-05T12:22:04+00:00</updated><id>https://www.mralexandernickel.com/feed.xml</id><title type="html">Alexander Nickel</title><entry><title type="html">Respecting User Preferences</title><link href="https://www.mralexandernickel.com/misc/css/2026/07/26/respecting-user-preferences.html" rel="alternate" type="text/html" title="Respecting User Preferences" /><published>2026-07-26T00:00:00+00:00</published><updated>2026-07-26T00:00:00+00:00</updated><id>https://www.mralexandernickel.com/misc/css/2026/07/26/respecting-user-preferences</id><content type="html" xml:base="https://www.mralexandernickel.com/misc/css/2026/07/26/respecting-user-preferences.html"><![CDATA[<p>User preferences have become an increasingly important part of UX design over the last couple of years. The most obvious example is probably <strong>dark mode</strong>, which is now supported by pretty much every modern operating system, browser, and application.</p>
+
+<p>But there is much more we can do to make our interfaces adapt to the people using them. Even something as simple as allowing users to increase the font size without breaking the layout can make a huge difference. And yet, I still see plenty of applications where a slightly larger font is enough to completely destroy the carefully designed layout. Accessibility is another example. Modern browsers provide excellent tools to check things like color contrast. Chrome, for example, has built-in contrast-ratio checks in its DevTools. And to be honest: even though I know about these tools, I don’t use them as often as I should. Then there is my personal favorite: animations. After years of: “Oh… this animation looks quite nice when I open an application.” or: “Wow… switching between workspaces feels like the windows are morphing into each other.”</p>
+
+<p>I have to admit that I’m pretty fed up with all these little “toys”. I don’t want to wait for an animation to finish before I can start typing into the window I just switched to. And I don’t want my phone to waste battery on animations that don’t provide any real value to me.Of course, that’s just my personal preference. And that’s exactly the point.</p>
+
+<p>It’s the user’s preference.</p>
+
+<p>Today I want to look at what the web platform already provides to respect these preferences — without adding another library, another configuration system, or a lot of JavaScript.</p>
+
+<h2 id="getting-media-queries-right">Getting Media Queries Right</h2>
+
+<p>I guess most of us know what a media query is by now. We usually think of media queries as a way to make a layout responsive to different screen sizes:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@media</span> <span class="p">(</span><span class="n">max-width</span><span class="p">:</span> <span class="m">768px</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c">/* mobile styles */</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>But that’s only one possible use case. There are media queries that allow our applications to react to characteristics and preferences defined by the client. And this leads to a slightly different way of thinking about <strong>Responsive Design</strong>. Is responsive design really only about responding to the size of the user’s screen? I don’t think so.</p>
+
+<p>I’d describe it more broadly as: “Responding to client-defined variables.”</p>
+
+<p>The variable can be the width of the viewport. It can be the orientation of the device. But it can also be: “Does my user prefer a dark theme?” or: “Does my user prefer an interface with less motion?”</p>
+
+<p>And these are only two of the available options.</p>
+
+<h2 id="what-if-my-user-prefers-dark-mode">What if my user prefers Dark Mode?</h2>
+
+<p>I’m pretty sure you know situations like this. You’re lying in bed and suddenly think: “I need to know this one thing right now.”</p>
+
+<p>So you pick up your phone, open the browser and start searching. And then… <strong>BAM.</strong> You’re immediately blinded by a huge, white screen. It’s almost painful, but you just need to know. <strong>NOW.</strong></p>
+
+<p>A few minutes later you’ve found whatever you were looking for. You put the phone away and somehow feel like you’ve just had a triple espresso. Wide awake. In the middle of the night. Situations like this are exactly where dark mode is handy as fuck. So let’s see what we can do about it. Most modern operating systems provide a dark-mode setting. Once the user enables it, the browser knows about this preference and makes it available to our web application. And all we need is a single media query.</p>
+
+<h3 id="css">CSS</h3>
+
+<p>We can use the <code class="language-plaintext highlighter-rouge">prefers-color-scheme</code> media feature directly in CSS:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">:root</span> <span class="p">{</span>
+  <span class="py">--background</span><span class="p">:</span> <span class="m">#ffffff</span><span class="p">;</span>
+  <span class="py">--foreground</span><span class="p">:</span> <span class="m">#111111</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@media</span> <span class="p">(</span><span class="n">prefers-color-scheme</span><span class="p">:</span> <span class="n">dark</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nd">:root</span> <span class="p">{</span>
+    <span class="py">--background</span><span class="p">:</span> <span class="m">#111111</span><span class="p">;</span>
+    <span class="py">--foreground</span><span class="p">:</span> <span class="m">#ffffff</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nt">body</span> <span class="p">{</span>
+  <span class="nl">background</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--background</span><span class="p">);</span>
+  <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--foreground</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>No JavaScript. No framework. No additional library. The browser already knows what the user prefers, so we can simply use that information. And if your application needs to know about the preference in JavaScript, that’s possible too.</p>
+
+<h3 id="javascript">JavaScript</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">darkMode</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nf">matchMedia</span><span class="p">(</span><span class="dl">"</span><span class="s2">(prefers-color-scheme: dark)</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="k">if </span><span class="p">(</span><span class="nx">darkMode</span><span class="p">.</span><span class="nx">matches</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">The user prefers dark mode.</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>It is even possible to react to changes while the application is running:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">darkMode</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nf">matchMedia</span><span class="p">(</span><span class="dl">"</span><span class="s2">(prefers-color-scheme: dark)</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="nx">darkMode</span><span class="p">.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">change</span><span class="dl">"</span><span class="p">,</span> <span class="nx">event</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span>
+    <span class="nx">event</span><span class="p">.</span><span class="nx">matches</span>
+      <span class="p">?</span> <span class="dl">"</span><span class="s2">Dark mode enabled</span><span class="dl">"</span>
+      <span class="p">:</span> <span class="dl">"</span><span class="s2">Dark mode disabled</span><span class="dl">"</span>
+  <span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Again, no library required. The browser already provides everything we need.</p>
+
+<h2 id="and-what-about-the-users-motion-preferences">And what about the user’s motion preferences?</h2>
+
+<p>And this is even better — at least for me personally. :D</p>
+
+<p>If a user doesn’t like unnecessary animations, we should respect that preference too. Fortunately, this is almost exactly the same thing. There is another media query specifically designed for this: <code class="language-plaintext highlighter-rouge">prefers-reduced-motion</code>. For example, let’s say we have a button with a small transition:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.button</span> <span class="p">{</span>
+  <span class="nl">transition</span><span class="p">:</span>
+    <span class="n">transform</span> <span class="m">200ms</span> <span class="n">ease</span><span class="p">,</span>
+    <span class="n">opacity</span> <span class="m">200ms</span> <span class="n">ease</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.button</span><span class="nd">:hover</span> <span class="p">{</span>
+  <span class="nl">transform</span><span class="p">:</span> <span class="n">scale</span><span class="p">(</span><span class="m">1.05</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>That’s perfectly fine for users who don’t mind animations. But what if the user has explicitly configured their operating system to reduce motion? We can simply turn the animation off:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.button</span> <span class="p">{</span>
+  <span class="nl">transition</span><span class="p">:</span>
+    <span class="n">transform</span> <span class="m">200ms</span> <span class="n">ease</span><span class="p">,</span>
+    <span class="n">opacity</span> <span class="m">200ms</span> <span class="n">ease</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.button</span><span class="nd">:hover</span> <span class="p">{</span>
+  <span class="nl">transform</span><span class="p">:</span> <span class="n">scale</span><span class="p">(</span><span class="m">1.05</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">@media</span> <span class="p">(</span><span class="n">prefers-reduced-motion</span><span class="p">:</span> <span class="n">reduce</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nc">.button</span> <span class="p">{</span>
+    <span class="nl">transition</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nc">.button</span><span class="nd">:hover</span> <span class="p">{</span>
+    <span class="nl">transform</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And that’s it. We don’t need to create a setting somewhere in our application. We don’t need to store the user’s preference. We don’t need JavaScript. The user has already told the operating system what they prefer, the browser knows about it, and CSS gives us a way to respect that preference.</p>
+
+<h2 id="responsive-design-is-more-than-screen-size">Responsive Design is more than screen size</h2>
+
+<p>This is the part I find particularly interesting. When we talk about responsive applications, we usually think about different screen sizes: “It needs to work on mobile, tablet and desktop.”</p>
+
+<p>Of course it does. But the viewport is just one of many variables that can influence how an application should behave. The web platform can also expose information about the user’s environment and preferences. That means our application can respond to questions such as:</p>
+
+<ul>
+  <li>How large is the viewport?</li>
+  <li>Is the device in portrait or landscape mode?</li>
+  <li>Does the user prefer a dark color scheme?</li>
+  <li>Does the user prefer reduced motion?</li>
+</ul>
+
+<p>And the important part is that most of this can be handled directly by the platform. No JavaScript framework. No additional dependency. No custom preference system. Just a few lines of CSS. That’s something I really like about the web platform.</p>
+
+<p>The user has already expressed a preference. We should simply respect it.</p>]]></content><author><name></name></author><category term="misc" /><category term="css" /><category term="javascript" /><category term="media queries" /><category term="css" /><summary type="html"><![CDATA[User preferences have become an increasingly important part of UX design over the last couple of years. The most obvious example is probably dark mode, which is now supported by pretty much every modern operating system, browser, and application.]]></summary></entry><entry><title type="html">Reacting to Viewport Events</title><link href="https://www.mralexandernickel.com/angular/misc/2022/11/04/reacting-to-viewport-events.html" rel="alternate" type="text/html" title="Reacting to Viewport Events" /><published>2022-11-04T00:00:00+00:00</published><updated>2022-11-04T00:00:00+00:00</updated><id>https://www.mralexandernickel.com/angular/misc/2022/11/04/reacting-to-viewport-events</id><content type="html" xml:base="https://www.mralexandernickel.com/angular/misc/2022/11/04/reacting-to-viewport-events.html"><![CDATA[<p>Instead of adding an EventListener to the ScrollEvent and keep polling the
+offsetTop of all elements your interested in, you should start using the
+IntersectionObserver API. I’ve released a Library that is providing
+Angular-Directives, Angular-Services and even a completely standalone
+TypeScript-Class, that is also used by all provided Angular-Services. The
+Services and Directives provided should be enough for almost all possible
+scenarios. If you really need something more custom you can create your own
+directives easily by using the provided Abstract-Directive and -Service. And if
+you don’t want to use Angular, you could also just use the provided
+TypeScript-Class, that has no dependencies to Angular at all.</p>
+
+<p>To get all of this beauty, you only need to install
+<code class="language-plaintext highlighter-rouge">@mralexandernickel/ngx-intersection</code>. Enjoy!</p>
+
+<h3 id="talk-is-cheap-show-me-the-code">Talk is cheap. Show me the code!</h3>
+
+<p><a href="#angular-directives">Angular Directives</a></p>
+
+<p><a href="#angular-services">Angular Services</a></p>
+
+<p><a href="#plain-typescript-class">How to use outside of Angular?</a></p>
+
+<h2 id="the-idea-behind-it">The idea behind it</h2>
+
+<p>There are many situations in which you want to know when a DOM-node is entering
+or leaving the users viewport. The most common example here is the lazyloading
+of images. But there are way more situations where this “knowledge” is
+important.</p>
+
+<p>For example, for running ecommerce businesses, everybody wants to know (and
+track), which products have been seen by the user… and how often. Its also
+important for every business, which marketing campaigns have been seen by the
+user, just to be able to compare with the click-rates, and be able to do better
+marketing in the future.</p>
+
+<p>Or if we got heavy components on our page, that need many ressources to get
+rendered (like memory, cpu or large http-requests), it is not the smartest idea
+to render them immediately…especially when they are not above-the-fold. You
+just cannot know if your user will scroll down, and if he doesn’t, all the
+“heavy-lifting” of this component have never been needed.</p>
+
+<h2 id="so-what-to-do-now">So what to do now?</h2>
+
+<p>For many years, all of us where listening to the ScrollEvent, and read the
+window.scrollY to get the current scroll-position, from there we compared with
+the targetElements offsetTop. If the targetElements offsetTop is between
+window.scrollY and window.scrollY + window.innerHeight we know, that our
+targetElement is inside the viewport.</p>
+
+<p>Nowadays we have a way more efficient (and elegant) way to get this information.
+Thanks to IntersectionObserver, we have a native way to get notified whenever an
+element is intersecting with its configured “root”. No need to listen to
+ScrollEvent anymore, and no need to manage debouncing to make sure that our
+callbacks aren’t executed hundreds of times per second.</p>
+
+<p>And on top of this, IntersectionObserver even has a built-in support for margins
+and thresholds, with which you can configure exactly when (and how often) you
+want to be notified. So you could define, that you want to get a notification,
+when the targetElement has passed 100px within the viewport, with 75% of its
+size. Or you could get single notifications, whenever your element passed 0%,
+25%, 50% and 75% …. and so on.</p>
+
+<p>But all of this flexibility comes with the downside of a complex configuration,
+just because you have so many options. Exactly that is the reason why I wrote a
+wrapper for it, and around this wrapper I’ve put some angular directives. One
+big advantage besides the simpler use, is the fact that different directives
+(and/or Services) still share the same underlying IntersectionObserver-Instance,
+ending up in a lower memory-consumption of your application.</p>
+
+<h2 id="code-examples">Code Examples</h2>
+
+<h3 id="naming-convention">Naming Convention</h3>
+
+<p>Because the provided margins and thresholds can be combined in many ways I
+needed to find a systematic way of naming, that could feel kind of “unnatural”
+on the first sight. But with this naming I am able to keep an overview of
+everything.</p>
+
+<h4 id="past-present-and-future">Past, Present and Future</h4>
+
+<p>We are providing three different root-margins, these are named “past”, “present”
+and “future”. The “future” is a bit outside of the Viewport, means a “node is
+entering the viewport in the near future”. The “present” is exactly at the
+boundaries of the Viewport, means the “node is entering exactly now the
+viewport”. And at last the “past”, this margin is a bit inside of the Viewport,
+could be translated to “a node has entered the viewport a short time ago”.</p>
+
+<p>All of the values for these points, can be customized with the provided
+InjectionTokens.</p>
+
+<p><a href="https://github.com/mralexandernickel/ngx-intersection/blob/master/projects/ngx-intersection/src/lib/config/injection-tokens.ts">Provided InjectionTokens</a></p>
+
+<h4 id="start-and-end">Start and End</h4>
+
+<p>The names “start” end “end” are used to differentiate between the 2 provided
+thresholds. The value “start” translates to a threshold of 0, means the very
+first pixel of the node is intersecting. The value “end” has a threshold of 1,
+means that the last pixel of the node is now intersecting with the root-margin.</p>
+
+<p>Also these values can be customized with InjectionTokens.</p>
+
+<h4 id="exit">Exit</h4>
+
+<p>Because the IntersectionObserver is not making any difference between the “side”
+of intersection (the upper margin is exactly the same as the lower one), I’ve
+provided a mechanism to find out when an intersection is ending.</p>
+
+<p>This is providing a way letting you know when a node is leaving the Viewport.
+(for example)</p>
+
+<h4 id="once">Once</h4>
+
+<p>Because the IntersectionObserver is sending notifications whenever a node is
+intersecting, I wanted to provide a way that is informing us only once. So if
+you only need a one-time notification when your node is intersecting, this name
+is the one you need.</p>
+
+<p>For example you will only want to load a lazyloaded image once, and not
+everytime the IMG is entering the Viewport.</p>
+
+<h3 id="installation">Installation</h3>
+
+<p>First you need to install the package with npm or yarn</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install</span> @mralexandernickel/ngx-intersection
+yarn add @mralexandernickel/ngx-intersection
+</code></pre></div></div>
+
+<p>after that, if you want to use the code inside your Angular Application, you
+need to import the provided NgModule into your app:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">IntersectionDirectivesModule</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@mralexandernickel/ngx-intersection</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="p">@</span><span class="nd">NgModule</span><span class="p">({</span>
+  <span class="na">declarations</span><span class="p">:</span> <span class="p">[</span><span class="nx">AppComponent</span><span class="p">],</span>
+  <span class="na">imports</span><span class="p">:</span> <span class="p">[</span>
+    <span class="nx">BrowserModule</span><span class="p">,</span>
+    <span class="nx">IntersectionDirectivesModule</span><span class="p">,</span> <span class="c1">// &lt;-- thats the important part</span>
+  <span class="p">],</span>
+  <span class="cm">/**
+   * The providers are not needed, but if you want to customize the root-margins
+   * this would be the way to do it! (After you imported them also from the
+   * package). The values you see here are the defaults.
+   */</span>
+  <span class="na">providers</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="na">provide</span><span class="p">:</span> <span class="nx">ROOT_MARGIN_FUTURE</span><span class="p">,</span> <span class="na">useValue</span><span class="p">:</span> <span class="dl">"</span><span class="s2">10%</span><span class="dl">"</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="na">provide</span><span class="p">:</span> <span class="nx">ROOT_MARGIN_PAST</span><span class="p">,</span> <span class="na">useValue</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0%</span><span class="dl">"</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="na">provide</span><span class="p">:</span> <span class="nx">ROOT_MARGIN_PRESENT</span><span class="p">,</span> <span class="na">useValue</span><span class="p">:</span> <span class="dl">"</span><span class="s2">-10%</span><span class="dl">"</span> <span class="p">},</span>
+  <span class="p">],</span>
+  <span class="na">bootstrap</span><span class="p">:</span> <span class="p">[</span><span class="nx">AppComponent</span><span class="p">],</span>
+<span class="p">})</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">AppModule</span> <span class="p">{}</span>
+</code></pre></div></div>
+
+<h3 id="angular-services">Angular Services</h3>
+
+<p>Like on could have guessed, the Library is providing 6 different
+Angular-Services, one for each root-margin/threshold combination.</p>
+
+<ul>
+  <li>PastStart</li>
+  <li>PastEnd</li>
+  <li>PresentStart</li>
+  <li>PresentEnd</li>
+  <li>FutureStart</li>
+  <li>FutureEnd</li>
+</ul>
+
+<p>All of these Angular-Services are doing nothing more than using Angulars great
+Dependency Injection, to pass the provided InjectionTokens to the constructor of
+the <a href="#plain-typescript-class">Plain TypeScript Class</a>, that every
+Angular-Service is extending.</p>
+
+<p>As an Example, this is the whole “IntersectionPresentStartService”:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">IntersectionObserverService</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./intersection-observer.service</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Injectable</span><span class="p">,</span> <span class="nx">Inject</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@angular/core</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span>
+  <span class="nx">ROOT_MARGIN_PRESENT</span><span class="p">,</span>
+  <span class="nx">THRESHOLD_START</span><span class="p">,</span>
+<span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../config/injection-tokens</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="p">@</span><span class="nd">Injectable</span><span class="p">({</span>
+  <span class="na">providedIn</span><span class="p">:</span> <span class="dl">"</span><span class="s2">root</span><span class="dl">"</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">IntersectionPresentStartService</span> <span class="kd">extends</span> <span class="nc">IntersectionObserverService</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">(</span>
+    <span class="p">@</span><span class="nd">Inject</span><span class="p">(</span><span class="nx">ROOT_MARGIN_PRESENT</span><span class="p">)</span> <span class="k">public</span> <span class="nx">rootMargin</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span>
+    <span class="p">@</span><span class="nd">Inject</span><span class="p">(</span><span class="nx">THRESHOLD_START</span><span class="p">)</span> <span class="k">public</span> <span class="nx">threshold</span><span class="p">:</span> <span class="kr">number</span>
+  <span class="p">)</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">(</span><span class="nx">rootMargin</span><span class="p">,</span> <span class="nx">threshold</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="angular-directives">Angular Directives</h3>
+
+<p>So if you came here ny the TL;DR you probably want to see directly, how you can
+use a directive in Angular. Then let’s mention that you want to call a method in
+your Component, when the first pixel of a node entered the Viewport. This would
+be the code:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;section</span> <span class="na">(ngxIntersectionPresentStart)=</span><span class="s">"theMethodInYourComponent()"</span><span class="nt">&gt;</span>
+  Hello World
+<span class="nt">&lt;/section&gt;</span>
+</code></pre></div></div>
+
+<p>…and thats it. Whenever the the first pixel of a node is no crossing the
+boundaries of the Viewport, <code class="language-plaintext highlighter-rouge">theMethodInYourComponent</code> will be called.</p>
+
+<p>For another example, let’s assume you want to call a method, when the last pixel
+of a node is leaving the Viewport for the first time. Then your code would look
+like this:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;section</span> <span class="na">(ngxIntersectionPresentEndOnceExit)=</span><span class="s">"theMethodInYourComponent()"</span><span class="nt">&gt;</span>
+  Hello World
+<span class="nt">&lt;/section&gt;</span>
+</code></pre></div></div>
+
+<p>…and your done again. Pretty simple and straightforward, isn’t it? :)</p>
+
+<p>To give you a liitle helping, I created a demo-application to visualize the
+behavior of all provided Directives. If you click on the burger, you will find a
+checkbox, that is displaying the root-margins (“past”, “present” and “future”).
+In the demo-application the root-margins are changed a bit, so that the “future”
+root-margin is visible inside the Viewport, as otherwise you wont see it.</p>
+
+<p>By default the “future” is a bit outside the Viewport, “present” is exactly the
+Viewport, and “past” is a bit inside the Viewport.</p>
+
+<p><a href="/demo/ngx-intersection/" target="_blank">And here is the link to the demo</a></p>
+
+<h3 id="plain-typescript-class">Plain Typescript Class</h3>
+
+<p>Like I mentioned earlier, all Angular-Directives and -Services are ending up in
+the same “Plain TypeScript Class” named “IntersectionObserverService”, that of
+course can be used directly even outside of Angular. All of it is strictly typed, so
+you can get all Information needed directly inside your Editor. But as a quick
+outline on how to use it:</p>
+
+<p>The class is providing two methods, “observeElement” and “unobserveElement”. The
+<code class="language-plaintext highlighter-rouge">observeElement</code> is needing two parameters, first one is the node to observe,
+and the second on are the callbacks that should be executed. The callbacks are
+an Object, with three properties to use (Interface is provided). these are:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">enter</code>, a function that gets executed when the intersection starts</li>
+  <li><code class="language-plaintext highlighter-rouge">exit</code>, a function that gets executed when the intersection ends</li>
+  <li><code class="language-plaintext highlighter-rouge">once</code>, a boolean flag, that defines if `unobserve` should be called
+automatically when the first intersection emitted</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I hope this package will save you as much time, as it does for me! If you have
+questions, or finding issues, or even have an idea of a better naming for
+“past”, “present” and “future” here (I’m still not 100% happy with it),
+feel free to ping me anytime, or just open an issue on github :)</p>
+
+<h2 id="related-links">Related Links</h2>
+
+<p><a href="https://github.com/mralexandernickel/ngx-intersection">ngx-intersection on GitHub</a></p>
+
+<p><a href="/demo/ngx-intersection/" target="_blank">ngx-intersection Demo Application</a></p>
+
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API">IntersectionObserver API</a></p>]]></content><author><name></name></author><category term="angular" /><category term="misc" /><category term="javascript" /><category term="angular" /><category term="typescript" /><category term="intersectionobserver" /><summary type="html"><![CDATA[Instead of adding an EventListener to the ScrollEvent and keep polling the offsetTop of all elements your interested in, you should start using the IntersectionObserver API. I’ve released a Library that is providing Angular-Directives, Angular-Services and even a completely standalone TypeScript-Class, that is also used by all provided Angular-Services. The Services and Directives provided should be enough for almost all possible scenarios. If you really need something more custom you can create your own directives easily by using the provided Abstract-Directive and -Service. And if you don’t want to use Angular, you could also just use the provided TypeScript-Class, that has no dependencies to Angular at all.]]></summary></entry></feed>

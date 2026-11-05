@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Proof of Concept | Product Slider">
+  <title>Proof of Concept | Product Slider</title>
+  <style>
+    /* basic styling for the demo - not relevant for product-slider */
+    * {
+      margin: 0;
+      padding: 0;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    html body {
+      min-height: 100%;
+      font-family: Georgia, "Times New Roman", Times, serif;
+      line-height: 1.618;
+      font-size: 18px;
+    }
+
+    body > main {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    ul {
+      list-style-position: inside;
+    }
+
+
+    body > main > section > figure {
+      margin-bottom: 20px;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-weight: 400;
+      margin-bottom: 1em;
+    }
+
+    p {
+      margin-bottom: 1em;
+    }
+
+    body > main > header,
+    body > main > section {
+      padding: 40px 0;
+    }
+
+    @media screen and (max-width: 640px) {
+      body > main {
+        padding: 0 15px;
+      }
+      .desktop-variants, .slide {
+        display: none;
+      }
+    }
+
+    @media screen and (min-width: 640px) {
+      .flex-row {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .width-33 {
+        flex: 0 0 420px;
+        max-width: 420px;
+      }
+
+      .width-50 {
+        flex: 0 0 640px;
+        max-width: 640px;
+      }
+
+      .width-66 {
+        flex: 0 0 860px;
+        max-width: 860px;
+      }
+
+      .width-66.ml-20 {
+        flex: 0 0 840px;
+        margin-left: 20px;
+        max-width: 840px;
+      }
+
+      .columns {
+        columns: 2;
+      }
+
+
+      .desktop-variants > div {
+        margin-bottom: 3em;
+      }
+
+      .columns > div {
+        -webkit-column-break-inside: avoid;
+      }
+
+      /*section.text.columns p:first-child::first-letter {
+        float: left;
+        font-size: 90px;
+        line-height: 60px;
+        padding-top: 4px;
+        padding-right: 8px;
+        padding-left: 3px;
+      }*/
+
+      section.text.center {
+        text-align: center;
+        padding: 40px 80px;
+      }
+    }
+  </style>
+  <style>
+    /* styles for product-slider */
+    .product-slider-container {
+      position: relative;
+    }
+
+    .product-slider-container .slide {
+      position: absolute;
+      top: 50%;
+      height: 60px;
+      width: 60px;
+      margin-top: -30px;
+      line-height: 60px;
+      text-align: center;
+      border-radius: 50%;
+      background-color: #ccc;
+      color: #000;
+      text-decoration: none;
+    }
+    .product-slider-container .slide.slide-right {
+      right: -30px;
+    }
+    .product-slider-container .slide.slide-left {
+      left: -30px;
+    }
+    
+    ul.product-slider {
+      list-style: none;
+      white-space: nowrap;
+      overflow-y: hidden;
+      overflow-x: scroll;
+      scroll-snap-type: x mandatory;
+      position: relative;
+    }
+
+    ul.product-slider::-webkit-scrollbar {
+      display: none;
+    }
+
+    ul.product-slider li {
+      display: inline-block;
+      white-space: normal;
+      margin-right: 20px;
+      scroll-snap-align: start;
+    }
+
+    ul.product-slider li:last-child {
+      margin-right: 0;
+    }
+
+    ul.product-slider li a {
+      text-decoration: none;
+      display: block;
+    }
+
+    ul.product-slider li a figure {
+    }
+
+    ul.product-slider li a h3 {
+      margin-bottom: 0;
+    }
+
+    ul.product-slider li a footer {
+    }
+
+    ul.product-slider li a footer span {
+    }
+
+    @media screen and (max-width: 640px) {
+      body > main {
+        padding: 0 15px;
+      }
+    }
+
+    @media screen and (min-width: 640px) {
+      ul.product-slider li {
+        width: 25%;
+      }
+
+      ul.product-slider li a figure img {
+        width: 100%;
+        height: auto;
+      }
+
+      ul.product-slider.visible-3 li {
+        width: 27.5%;
+      }
+
+      ul.product-slider.visible-4 li {
+        width: 21.5%;
+      }
+
+      ul.product-slider.visible-5 li {
+        width: 16.2%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Proof of Concept</h1>
+      <section class="columns desktop-variants">
+        <div>
+          <h2>Browser Tooling</h2>
+          <p>In this variant we only use what the Browser already comes with. Horizontal Areas can be scrolled by holding the shift-key and use the mousewheel meanwhile. Because most people don't know of this feature, we should add some kind of "hint" when entering a slider with the mouse.</p>
+          <p>The allover scroll-behavior and performance in general is best in this variant!</p>
+          <a href="/">Try Browser Tooling!</a>
+        </div>
+        <div>
+          <h2>Catch Mousewheel</h2>
+          <p>This means that we're going to catch the "mousewheel-event" when the mouse is "above" a slider. The vertical scrolling is prevented while the mouse is "on" a slider.</p>
+          <p>In this variant we don't need no explanation, but some people find this behavior a bit "disabling".</p>
+          <a href="/catch-mousewheel.html">Catch The Mousewheel!</a>
+        </div>
+        <div>
+          <h2>Show Arrows</h2>
+          <p>Showing arrows inside each Slider means that we need to use JavaScript to generate the arrow-elements, to handle the click-events on them arrows, find out if there is content-to-scroll in each direction and finally use this information to show or hide the arrows per direction.</p>
+          <p>This variant is the most common one, but also has the worst performance!</p>
+          <a href="/show-arrows.html">Please Show Arrows!</a>
+        </div>
+        <div>
+          <h2>Visible Items on Desktop</h2>
+          <p>Here you can configure how many single items are fully visible within the visible area of the sliders.</p>
+          <ul>
+            <li><a class="set-visible" data-visible="3" href="#">Show 3 Visible Items</a></li>
+            <li><a class="set-visible" data-visible="4" href="#">Show 4 Visible Items</a></li>
+            <li><a class="set-visible" data-visible="5" href="#">Show 5 Visible items</a></li>
+          </ul>
+        </div>
+      </section>
+    </header>
+    <h2>Product Slider</h2>
+    <div class="product-slider-container"><ul class="product-slider visible-3">
+      <li>
+        <a href="#">
+          <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+          <h3>Product #1</h3>
+          <footer><span>19,99 €</span></footer>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+          <h3>Product #2</h3>
+          <footer><span>19,99 €</span></footer>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+          <h3>Product #3</h3>
+          <footer><span>19,99 €</span></footer>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+          <h3>Product #4</h3>
+          <footer><span>19,99 €</span></footer>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+          <h3>Product #5</h3>
+          <footer><span>19,99 €</span></footer>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+          <h3>Product #6</h3>
+          <footer><span>19,99 €</span></footer>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+          <h3>Product #7</h3>
+          <footer><span>19,99 €</span></footer>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+          <h3>Product #8</h3>
+          <footer><span>19,99 €</span></footer>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+          <h3>Product #9</h3>
+          <footer><span>19,99 €</span></footer>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+          <h3>Product #10</h3>
+          <footer><span>19,99 €</span></footer>
+        </a>
+      </li>
+    </ul></div>
+    <section class="text center">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id volutpat lacus laoreet non curabitur gravida arcu. Ac turpis egestas maecenas pharetra. Quisque non tellus orci ac. In hac habitasse platea dictumst vestibulum rhoncus est. Diam ut venenatis tellus in metus vulputate eu scelerisque felis. Sit amet luctus venenatis lectus magna fringilla urna porttitor rhoncus. Est ultricies integer quis auctor elit sed vulputate mi. Gravida in fermentum et sollicitudin ac. Eget duis at tellus at. Viverra tellus in hac habitasse platea dictumst vestibulum rhoncus est. Nulla malesuada pellentesque elit eget gravida cum sociis natoque penatibus. Ac turpis egestas sed tempus urna. Massa ultricies mi quis hendrerit. Id aliquet lectus proin nibh nisl condimentum id.</p>
+      <p>Turpis cursus in hac habitasse platea dictumst quisque sagittis purus. Volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque. Consectetur adipiscing elit pellentesque habitant morbi tristique. Lacus suspendisse faucibus interdum posuere. Dictum non consectetur a erat nam. Faucibus ornare suspendisse sed nisi lacus sed viverra. Massa placerat duis ultricies lacus sed. Malesuada fames ac turpis egestas. Feugiat vivamus at augue eget arcu dictum varius duis. Suscipit tellus mauris a diam maecenas sed enim ut. Nunc non blandit massa enim nec dui nunc mattis. Dolor sit amet consectetur adipiscing elit ut aliquam purus. Magna fringilla urna porttitor rhoncus dolor purus non. Eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum. Vivamus at augue eget arcu dictum varius duis at. Feugiat vivamus at augue eget arcu dictum. Volutpat est velit egestas dui id. Malesuada bibendum arcu vitae elementum curabitur vitae nunc sed. Dignissim cras tincidunt lobortis feugiat.</p>
+    </section>
+    <section class="flex-row">
+      <figure class="column width-33"><img width="600" height="600" src="1200x1200.jpg" loading="lazy" alt="product placeholder"></figure>
+      <aside class="column width-66 ml-20">
+        <h2>Product Slider</h2>
+        <div class="product-slider-container"><ul class="product-slider visible-3">
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #1</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #2</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #3</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #4</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #5</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #6</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #7</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #8</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #9</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #10</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+        </ul></div>
+      </aside>
+    </section>
+    <section class="text columns">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id volutpat lacus laoreet non curabitur gravida arcu. Ac turpis egestas maecenas pharetra. Quisque non tellus orci ac. In hac habitasse platea dictumst vestibulum rhoncus est. Diam ut venenatis tellus in metus vulputate eu scelerisque felis. Sit amet luctus venenatis lectus magna fringilla urna porttitor rhoncus. Est ultricies integer quis auctor elit sed vulputate mi. Gravida in fermentum et sollicitudin ac. Eget duis at tellus at. Viverra tellus in hac habitasse platea dictumst vestibulum rhoncus est. Nulla malesuada pellentesque elit eget gravida cum sociis natoque penatibus. Ac turpis egestas sed tempus urna. Massa ultricies mi quis hendrerit. Id aliquet lectus proin nibh nisl condimentum id.</p>
+      <p>Turpis cursus in hac habitasse platea dictumst quisque sagittis purus. Volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque. Consectetur adipiscing elit pellentesque habitant morbi tristique. Lacus suspendisse faucibus interdum posuere. Dictum non consectetur a erat nam. Faucibus ornare suspendisse sed nisi lacus sed viverra. Massa placerat duis ultricies lacus sed. Malesuada fames ac turpis egestas. Feugiat vivamus at augue eget arcu dictum varius duis. Suscipit tellus mauris a diam maecenas sed enim ut. Nunc non blandit massa enim nec dui nunc mattis. Dolor sit amet consectetur adipiscing elit ut aliquam purus. Magna fringilla urna porttitor rhoncus dolor purus non. Eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum. Vivamus at augue eget arcu dictum varius duis at. Feugiat vivamus at augue eget arcu dictum. Volutpat est velit egestas dui id. Malesuada bibendum arcu vitae elementum curabitur vitae nunc sed. Dignissim cras tincidunt lobortis feugiat.</p>
+    </section>
+    <section class="flex-row">
+      <figure class="column width-33"><img width="600" height="600" src="1200x1200.jpg" loading="lazy" alt="product placeholder"></figure>
+      <aside class="column width-66 ml-20">
+        <h2>Product Slider</h2>
+        <div class="product-slider-container"><ul class="product-slider visible-3">
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #1</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #2</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #3</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #4</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #5</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #6</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #7</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #8</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #9</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #10</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+        </ul></div>
+      </aside>
+    </section>
+    <section class="text center">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id volutpat lacus laoreet non curabitur gravida arcu. Ac turpis egestas maecenas pharetra. Quisque non tellus orci ac. In hac habitasse platea dictumst vestibulum rhoncus est. Diam ut venenatis tellus in metus vulputate eu scelerisque felis. Sit amet luctus venenatis lectus magna fringilla urna porttitor rhoncus. Est ultricies integer quis auctor elit sed vulputate mi. Gravida in fermentum et sollicitudin ac. Eget duis at tellus at. Viverra tellus in hac habitasse platea dictumst vestibulum rhoncus est. Nulla malesuada pellentesque elit eget gravida cum sociis natoque penatibus. Ac turpis egestas sed tempus urna. Massa ultricies mi quis hendrerit. Id aliquet lectus proin nibh nisl condimentum id.</p>
+      <p>Turpis cursus in hac habitasse platea dictumst quisque sagittis purus. Volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque. Consectetur adipiscing elit pellentesque habitant morbi tristique. Lacus suspendisse faucibus interdum posuere. Dictum non consectetur a erat nam. Faucibus ornare suspendisse sed nisi lacus sed viverra. Massa placerat duis ultricies lacus sed. Malesuada fames ac turpis egestas. Feugiat vivamus at augue eget arcu dictum varius duis. Suscipit tellus mauris a diam maecenas sed enim ut. Nunc non blandit massa enim nec dui nunc mattis. Dolor sit amet consectetur adipiscing elit ut aliquam purus. Magna fringilla urna porttitor rhoncus dolor purus non. Eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum. Vivamus at augue eget arcu dictum varius duis at. Feugiat vivamus at augue eget arcu dictum. Volutpat est velit egestas dui id. Malesuada bibendum arcu vitae elementum curabitur vitae nunc sed. Dignissim cras tincidunt lobortis feugiat.</p>
+    </section>
+    <section class="flex-row">
+      <figure class="column width-33"><img width="600" height="600" src="1200x1200.jpg" loading="lazy" alt="product placeholder"></figure>
+      <aside class="column width-66 ml-20">
+        <h2>Product Slider</h2>
+        <div class="product-slider-container"><ul class="product-slider visible-3">
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #1</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #2</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #3</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #4</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #5</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #6</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #7</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #8</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #9</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #10</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+        </ul></div>
+      </aside>
+    </section>
+    <section class="text columns">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id volutpat lacus laoreet non curabitur gravida arcu. Ac turpis egestas maecenas pharetra. Quisque non tellus orci ac. In hac habitasse platea dictumst vestibulum rhoncus est. Diam ut venenatis tellus in metus vulputate eu scelerisque felis. Sit amet luctus venenatis lectus magna fringilla urna porttitor rhoncus. Est ultricies integer quis auctor elit sed vulputate mi. Gravida in fermentum et sollicitudin ac. Eget duis at tellus at. Viverra tellus in hac habitasse platea dictumst vestibulum rhoncus est. Nulla malesuada pellentesque elit eget gravida cum sociis natoque penatibus. Ac turpis egestas sed tempus urna. Massa ultricies mi quis hendrerit. Id aliquet lectus proin nibh nisl condimentum id.</p>
+      <p>Turpis cursus in hac habitasse platea dictumst quisque sagittis purus. Volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque. Consectetur adipiscing elit pellentesque habitant morbi tristique. Lacus suspendisse faucibus interdum posuere. Dictum non consectetur a erat nam. Faucibus ornare suspendisse sed nisi lacus sed viverra. Massa placerat duis ultricies lacus sed. Malesuada fames ac turpis egestas. Feugiat vivamus at augue eget arcu dictum varius duis. Suscipit tellus mauris a diam maecenas sed enim ut. Nunc non blandit massa enim nec dui nunc mattis. Dolor sit amet consectetur adipiscing elit ut aliquam purus. Magna fringilla urna porttitor rhoncus dolor purus non. Eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum. Vivamus at augue eget arcu dictum varius duis at. Feugiat vivamus at augue eget arcu dictum. Volutpat est velit egestas dui id. Malesuada bibendum arcu vitae elementum curabitur vitae nunc sed. Dignissim cras tincidunt lobortis feugiat.</p>
+    </section>
+    <section class="flex-row">
+      <figure class="column width-33"><img width="600" height="600" src="1200x1200.jpg" loading="lazy" alt="product placeholder"></figure>
+      <aside class="column width-66 ml-20">
+        <h2>Product Slider</h2>
+        <div class="product-slider-container"><ul class="product-slider visible-3">
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #1</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #2</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #3</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #4</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #5</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #6</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #7</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #8</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #9</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #10</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+        </ul></div>
+      </aside>
+    </section>
+    <section class="text center">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id volutpat lacus laoreet non curabitur gravida arcu. Ac turpis egestas maecenas pharetra. Quisque non tellus orci ac. In hac habitasse platea dictumst vestibulum rhoncus est. Diam ut venenatis tellus in metus vulputate eu scelerisque felis. Sit amet luctus venenatis lectus magna fringilla urna porttitor rhoncus. Est ultricies integer quis auctor elit sed vulputate mi. Gravida in fermentum et sollicitudin ac. Eget duis at tellus at. Viverra tellus in hac habitasse platea dictumst vestibulum rhoncus est. Nulla malesuada pellentesque elit eget gravida cum sociis natoque penatibus. Ac turpis egestas sed tempus urna. Massa ultricies mi quis hendrerit. Id aliquet lectus proin nibh nisl condimentum id.</p>
+      <p>Turpis cursus in hac habitasse platea dictumst quisque sagittis purus. Volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque. Consectetur adipiscing elit pellentesque habitant morbi tristique. Lacus suspendisse faucibus interdum posuere. Dictum non consectetur a erat nam. Faucibus ornare suspendisse sed nisi lacus sed viverra. Massa placerat duis ultricies lacus sed. Malesuada fames ac turpis egestas. Feugiat vivamus at augue eget arcu dictum varius duis. Suscipit tellus mauris a diam maecenas sed enim ut. Nunc non blandit massa enim nec dui nunc mattis. Dolor sit amet consectetur adipiscing elit ut aliquam purus. Magna fringilla urna porttitor rhoncus dolor purus non. Eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum. Vivamus at augue eget arcu dictum varius duis at. Feugiat vivamus at augue eget arcu dictum. Volutpat est velit egestas dui id. Malesuada bibendum arcu vitae elementum curabitur vitae nunc sed. Dignissim cras tincidunt lobortis feugiat.</p>
+    </section>
+    <section class="flex-row">
+      <figure class="column width-33"><img width="600" height="600" src="1200x1200.jpg" loading="lazy" alt="product placeholder"></figure>
+      <aside class="column width-66 ml-20">
+        <h2>Product Slider</h2>
+        <div class="product-slider-container"><ul class="product-slider visible-3">
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #1</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #2</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #3</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #4</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #5</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #6</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #7</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #8</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #9</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #10</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+        </ul></div>
+      </aside>
+    </section>
+    <section class="text columns">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id volutpat lacus laoreet non curabitur gravida arcu. Ac turpis egestas maecenas pharetra. Quisque non tellus orci ac. In hac habitasse platea dictumst vestibulum rhoncus est. Diam ut venenatis tellus in metus vulputate eu scelerisque felis. Sit amet luctus venenatis lectus magna fringilla urna porttitor rhoncus. Est ultricies integer quis auctor elit sed vulputate mi. Gravida in fermentum et sollicitudin ac. Eget duis at tellus at. Viverra tellus in hac habitasse platea dictumst vestibulum rhoncus est. Nulla malesuada pellentesque elit eget gravida cum sociis natoque penatibus. Ac turpis egestas sed tempus urna. Massa ultricies mi quis hendrerit. Id aliquet lectus proin nibh nisl condimentum id.</p>
+      <p>Turpis cursus in hac habitasse platea dictumst quisque sagittis purus. Volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque. Consectetur adipiscing elit pellentesque habitant morbi tristique. Lacus suspendisse faucibus interdum posuere. Dictum non consectetur a erat nam. Faucibus ornare suspendisse sed nisi lacus sed viverra. Massa placerat duis ultricies lacus sed. Malesuada fames ac turpis egestas. Feugiat vivamus at augue eget arcu dictum varius duis. Suscipit tellus mauris a diam maecenas sed enim ut. Nunc non blandit massa enim nec dui nunc mattis. Dolor sit amet consectetur adipiscing elit ut aliquam purus. Magna fringilla urna porttitor rhoncus dolor purus non. Eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum. Vivamus at augue eget arcu dictum varius duis at. Feugiat vivamus at augue eget arcu dictum. Volutpat est velit egestas dui id. Malesuada bibendum arcu vitae elementum curabitur vitae nunc sed. Dignissim cras tincidunt lobortis feugiat.</p>
+    </section>
+    <section class="flex-row">
+      <figure class="column width-33"><img width="600" height="600" src="1200x1200.jpg" loading="lazy" alt="product placeholder"></figure>
+      <aside class="column width-66 ml-20">
+        <h2>Product Slider</h2>
+        <div class="product-slider-container"><ul class="product-slider visible-3">
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #1</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #2</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #3</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #4</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #5</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #6</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #7</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #8</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #9</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure><img width="200" height="300" src="400x600.jpg" loading="lazy" alt="product placeholder"></figure>
+              <h3>Product #10</h3>
+              <footer><span>19,99 €</span></footer>
+            </a>
+          </li>
+        </ul></div>
+      </aside>
+    </section>
+  </main>
+  <script>
+    var slideElementsVisible = 3;
+    var sliders = document.querySelectorAll(".product-slider");
+    function showArrows() {
+      for (let i = 0; i < sliders.length; i++) {
+        const slider = sliders[i];
+        slider.style.scrollSnapType = 'none';
+        slider.style.scrollBehavior = 'smooth';
+        const slideElements = slider.querySelectorAll('li');
+        let currentSlideIndex = 0;
+
+        const left = document.createElement('a');
+        left.className = 'slide slide-left';
+        left.href = '#';
+        left.innerText = '<';
+        left.setAttribute('hidden', true);
+        left.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (currentSlideIndex !== 0) {
+            currentSlideIndex--;
+            slider.scrollLeft = slideElements[currentSlideIndex].offsetLeft;
+          }
+          if (currentSlideIndex === 0) {
+            left.setAttribute('hidden', true);
+          }
+          right.removeAttribute('hidden');
+        }, false);
+        slider.parentNode.appendChild(left);
+
+        const right = document.createElement('a');
+        right.className = 'slide slide-right';
+        right.href = '#';
+        right.innerText = '>';
+        right.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (currentSlideIndex !== slideElements.length - slideElementsVisible) {
+            currentSlideIndex++;
+            slider.scrollLeft = slideElements[currentSlideIndex].offsetLeft;
+          }
+          if (currentSlideIndex === slideElements.length - slideElementsVisible) {
+            right.setAttribute('hidden', true);
+          }
+          left.removeAttribute('hidden');
+        }, false);
+        slider.parentNode.appendChild(right);
+      }
+    }
+    const mediaQuery = '(min-width: 640px)';
+    const mediaQueryList = window.matchMedia(mediaQuery);
+    if (mediaQueryList.matches) {
+      if (!localStorage.getItem('use-browser-tooling')) {
+        showArrows();
+      }
+    }
+    mediaQueryList.addEventListener('change', event => {
+      if (event.matches) {
+        if (!localStorage.getItem('use-browser-tooling')) {
+          showArrows();
+        }
+      }
+    });
+  </script>
+  <script>
+    // js for the demo... not relevant for sliders
+    const setVisibles = document.querySelectorAll('a.set-visible');
+    for (let i = 0; i < setVisibles.length; i++) {
+      const setVisible = setVisibles[i];
+      setVisible.addEventListener('click', (e) => {
+        e.preventDefault();
+        for (let j = 0; j < sliders.length; j++) {
+          const element = sliders[j];
+          slideElementsVisible = parseInt(e.target.dataset.visible);
+          element.className = 'product-slider visible-' + e.target.dataset.visible;
+        }
+      });
+    }
+  </script>
+</body>
+</html>
